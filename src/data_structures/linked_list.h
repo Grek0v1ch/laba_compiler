@@ -26,7 +26,7 @@ private:
 	pnode<T> _first;
 public:
 	linked_list() : _first(0) {}
-	linked_list(const T& value) : _first(pnode<T>(node<T>(value))) {}
+	linked_list(const T& value) : _first(std::make_shared<node<T>>(node<T>(value))) {}
 
 	// Метод проверяет, является ли список пустым.
 	bool empty() const { return _first == 0; }
