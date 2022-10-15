@@ -52,6 +52,26 @@ public:
 		_arr[idx]->push_front(value);
 	}
 
+	// Метод удаления элемента из хеш-таблицы по значению.
+	void remove(const T& value) {
+		T_hash hash = T_hash();
+		// Вычисляем хеш элемента.
+		int idx = hash(value, _arr.size());
+		// Далее пытаемся найти элемент по его хешу, если нашли - удаляем.
+		if (_arr[idx] == 0) {
+			return;
+		}
+		if (_arr[idx]->find(value)) {
+			_size--;
+			_arr[idx]->remove(value);
+			// Если в ячейке по данному хешу был только один элемент, то зануляем ячейку.
+			// Это необходимо для корректной работы функции печати.
+			if (_arr[idx]->empty()) {
+				_arr[idx] = 0;
+			}
+		}
+	}
+
 	// Метод печати хеш-таблицы в консоль.
 	void print() {
 		for (unsigned int i = 0; i < _arr.size(); i++) {
