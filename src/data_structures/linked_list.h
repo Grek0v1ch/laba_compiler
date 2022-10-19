@@ -1,6 +1,8 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
+#include <iostream>
+
 // Класс узла связанного списка.
 template <class T>
 class node {

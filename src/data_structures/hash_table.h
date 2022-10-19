@@ -5,28 +5,10 @@
 #include <vector>
 #include "linked_list.h"
 
-// Хеш-функция для работы со строками.
-int hash_function_horner(const std::string& s, const int table_size, const int key) {
-    int hash_result = 0;
-    for (unsigned int i = 0; i < s.length(); i++) {
-        hash_result = (key * hash_result + s[i]) % table_size;
-    }
-    hash_result = (hash_result * 2 + 1) % table_size;
-    return hash_result;
-}
-
-// Структура - обертка над хеш-функцией.
-struct hash_function {
-	static const int _key = 53;
-    int operator()(const std::string& s, const int table_size) const {
-        return hash_function_horner(s, table_size, _key);
-    }
-};
-
 // Класс хеш-таблицы.
 // В качестве второго передаваемого класса следует указатель класс-обертку над хеш-функцией.
 // В классе обертке необходима переалресация оператора ().
-template <class T, class T_hash = hash_function>
+template <class T, class T_hash>
 class hash_table {
 private:
 	static const int DEFAULT_SIZE = 7;

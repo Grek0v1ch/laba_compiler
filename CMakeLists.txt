@@ -5,4 +5,6 @@ add_compile_options(-std=c++11)
 add_compile_options(-g)
 add_compile_options(-Wall -Wextra -pedantic -Werror)
 
-add_executable(laba src/main.cpp)
+add_executable(laba src/main.cpp
+					src/lexical_analyzer/DFSM.cpp
+					src/lexical_analyzer/lexical_analyzer.cpp)
