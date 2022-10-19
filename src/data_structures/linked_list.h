@@ -10,7 +10,9 @@ private:
 public:
 	node(const T& value, const std::shared_ptr<node<T>>& next = 0) : _value(value), _next(next) {}
 
+	// Метод возвращает указатель на следующий узел.
 	std::shared_ptr<node<T>> next() const { return _next; }
+	// Метод возвращает значение узла.
 	T value() const { return _value; }
 	// Класс связанного списка объявлен дружеским, чтобы иметь доступ к его приватным членам
 	// из класса связанного списка.
@@ -34,6 +36,7 @@ public:
 	// Метод проверяет, является ли список пустым.
 	bool empty() const { return _first == 0; }
 
+	// Метод возвращает указатель на первый элемент списка.
 	pnode<T> front() const { return _first; }
 
 	// Метод добавляет новый элемент в начало списка.
