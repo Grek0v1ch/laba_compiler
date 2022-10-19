@@ -1,4 +1,5 @@
 build/
+examples/
 laba_compiler.sublime-project
 laba_compiler.sublime-workspace
 .DS_Store
