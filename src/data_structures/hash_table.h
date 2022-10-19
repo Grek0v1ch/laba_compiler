@@ -11,9 +11,9 @@
 template <class T, class T_hash>
 class hash_table {
 private:
-	static const int DEFAULT_SIZE = 7;
+	static const size_t DEFAULT_SIZE = 7;
 	std::vector<std::shared_ptr<linked_list<T>>> _arr;
-	unsigned int _size;
+	size_t _size;
 public:
 	hash_table() : _arr(std::vector<std::shared_ptr<linked_list<T>>>(DEFAULT_SIZE, 0)), _size(0) {}
 
@@ -56,7 +56,7 @@ public:
 
 	// Метод печати хеш-таблицы в консоль.
 	void print() {
-		for (unsigned int i = 0; i < _arr.size(); i++) {
+		for (size_t i = 0; i < _arr.size(); i++) {
 			if (_arr[i] == 0) {
 				continue;
 			}
@@ -66,6 +66,21 @@ public:
 				curr = curr->next();
 			}
 		}
+	}
+
+	std::vector<std::pair<size_t, T>> to_array() {
+		std::vector<std::pair<size_t, T>> res;
+		for (size_t i = 0; i < _arr.size(); i++) {
+			if (_arr[i] == 0) {
+				continue;
+			}
+			pnode<T> curr = _arr[i]->front();
+			while (curr) {
+				res.push_back(std::make_pair(i, curr->value()));
+				curr = curr->next();
+			}
+		}
+		return res;
 	}
 };
 

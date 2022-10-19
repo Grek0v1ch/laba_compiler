@@ -14,6 +14,7 @@ struct lexeme {
 	// Сама лексема.
 	std::string _text;
 
+	lexeme() : _id(ERROR), _text("") {}
 	lexeme(const type_lex& id, const std::string& text) : _id(id), _text(text) {}
 	lexeme(const type_lex&, const char);
 
