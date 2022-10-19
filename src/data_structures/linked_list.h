@@ -9,6 +9,9 @@ private:
 	std::shared_ptr<node<T>> _next;
 public:
 	node(const T& value, const std::shared_ptr<node<T>>& next = 0) : _value(value), _next(next) {}
+
+	std::shared_ptr<node<T>> next() const { return _next; }
+	T value() const { return _value; }
 	// Класс связанного списка объявлен дружеским, чтобы иметь доступ к его приватным членам
 	// из класса связанного списка.
 	template <class T1> friend class linked_list;
@@ -30,6 +33,8 @@ public:
 
 	// Метод проверяет, является ли список пустым.
 	bool empty() const { return _first == 0; }
+
+	pnode<T> front() const { return _first; }
 
 	// Метод добавляет новый элемент в начало списка.
 	void push_front(const T& value) {

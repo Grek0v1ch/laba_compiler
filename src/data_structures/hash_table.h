@@ -78,9 +78,11 @@ public:
 			if (_arr[i] == 0) {
 				continue;
 			}
-			std::cout << "key: " << i << "; values: ";
-			_arr[i]->print();
-			std::cout << '\n';
+			pnode<T> curr = _arr[i]->front();
+			while (curr) {
+				std::cout << curr->value() << "   key: " << i << '\n';
+				curr = curr->next();
+			}
 		}
 	}
 };
