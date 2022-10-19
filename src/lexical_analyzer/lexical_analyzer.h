@@ -7,8 +7,11 @@
 #include "DFSM.h"
 #include "../data_structures/hash_table.h"
 
+// Структура лексемы.
 struct lexeme {
+	// Тип лексемы.
 	type_lex _id;
+	// Сама лексема.
 	std::string _text;
 
 	lexeme(const type_lex& id, const std::string& text) : _id(id), _text(text) {}
@@ -22,47 +25,18 @@ struct lexeme {
 struct hash_function_lex {
 	static const int _key = 53;
 
+	// Хеш-функция для строк.
 	int hash_function(const std::string&, const int, const int) const;
+	// Переопределение оператора () для корректной работы хеш-таблицы.
 	int operator()(const lexeme&, const int) const;
 };
 
+// Класс лексического анализатора.
 class lexical_analyzer {
 public:
-	static hash_table<lexeme, hash_function_lex> lex_analize(std::string str) {
-		std::vector<char> spc_sym = { ' ', '\n', '\t' };
-		std::vector<char> spr_sym = { '+', '-', '(', ')', '{', '}', ',', ';', '=' };
-		std::vector<std::string> keywords = { "return", "int", "char" };
-		hash_table<lexeme, hash_function_lex> res_table;
-		DFSM automat = DFSM();
-		std::string temp = "";
-		for (size_t i = 0; i < str.size(); i++) {
-			bool is_spc_sym = std::find(spc_sym.begin(), spc_sym.end(), str[i]) != spc_sym.end();
-			bool is_spr_sym = std::find(spr_sym.begin(), spr_sym.end(), str[i]) != spr_sym.end();
-			
-			if ((is_spc_sym || is_spr_sym) && (temp != "")) {
-				if (std::find(keywords.begin(), keywords.end(), temp) != keywords.end()) {
-					res_table.add(lexeme(KEYWORD, temp));
-					temp = "";
-					continue;
-				}
-				type_lex res = automat.process(temp);
-				if (res == ERROR) {
-					std::cout << "Error in " << temp << '\n';
-					temp = "";
-					continue;
-				}
-				res_table.add(lexeme(res, temp));
-				temp = "";
-			}
-			if (! is_spc_sym && ! is_spr_sym) {
-				temp += str[i];
-			}
-			if (is_spr_sym) {
-				res_table.add(lexeme(SEPARATORS, str[i]));
-			}
-		}
-		return res_table;
-	}
+	// Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
+	// лексем.
+	static hash_table<lexeme, hash_function_lex> lex_analize(std::string);
 };
 
 #endif // LEXICAL_ANALYZER_H

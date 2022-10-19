@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+// Тип лексем, допускаемых лексическим анализатором.
 enum type_lex {
 	KEYWORD,
 	ID,
@@ -13,8 +14,10 @@ enum type_lex {
 	ERROR
 };
 
+// Класс детерминированного конечного автомата для распознования лексем языка.
 class DFSM {
 private:
+	// Состояния автомата.
 	enum state {
 		st_0_start,
 		st_1_end_id,
@@ -24,6 +27,7 @@ private:
 		st_5_end_string
 	};
 
+	// Значения текущего символа строки.
 	enum event {
 		event_letter,
 		event_digit,
@@ -38,11 +42,14 @@ private:
 
 	table _table;
 
+	// Метод совершает "шаг" автомата - из состояния по символу переходит в новое состояние.
 	state function_step(const state, const event) const;
+	// Метод определяет тип символа.
 	event get_event(const char) const;
 
 public:
 	DFSM();
+	// Метод непосредственно моделирует работу автомата.
 	type_lex process(const std::string) const;
 };
 
