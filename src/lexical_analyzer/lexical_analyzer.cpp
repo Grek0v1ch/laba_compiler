@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& out, const lexeme& lex) {
 			output = "Separators";
 			break;
 		case STRING:
-			output = "SimpleStringExpresion";
+			output = "SimpleStringExpression";
 			break;
 		case ERROR:
 			output = "Error";

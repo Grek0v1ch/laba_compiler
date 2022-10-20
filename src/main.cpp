@@ -1,12 +1,10 @@
-#include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include "data_structures/hash_table.h"
-#include "lexical_analyzer/DFSM.h"
 #include "lexical_analyzer/lexical_analyzer.h"
 
-// Компоратор для сортировки вектора лексем по их типу.
+// Компаратор для сортировки вектора лексем по их типу.
 bool cmp(const std::pair<size_t, lexeme>& first, const std::pair<size_t, lexeme>& second) {
 	return first.second._id < second.second._id;
 }
@@ -23,8 +21,8 @@ bool open_file(int argc, char const *argv[], std::ifstream& fin, std::ofstream& 
 
 // Функция получает весь текст из файла.
 std::string get_all_text(std::ifstream& fin) {
-	std::string all_text = "";
-	std::string buff;
+    std::string all_text, buff;
+    all_text = "";
 	while (getline(fin, buff, '\n')) {
 		all_text += buff + "\n";
 	}
