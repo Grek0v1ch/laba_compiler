@@ -1,7 +1,7 @@
 #ifndef LEXICAL_ANALYZER_H
 #define LEXICAL_ANALYZER_H
 
-#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include "DFSM.h"
@@ -37,7 +37,7 @@ class lexical_analyzer {
 public:
 	// Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 	// лексем.
-	static hash_table<lexeme, hash_function_lex> lex_analize(std::string);
+	static hash_table<lexeme, hash_function_lex> lex_analize(std::string, std::ofstream&);
 };
 
 #endif // LEXICAL_ANALYZER_H

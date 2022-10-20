@@ -49,7 +49,7 @@ int hash_function_lex::operator()(const lexeme& s, const int table_size) const {
 
 // Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 // лексем.
-hash_table<lexeme, hash_function_lex> lexical_analyzer::lex_analize(std::string str) {
+hash_table<lexeme, hash_function_lex> lexical_analyzer::lex_analize(std::string str, std::ofstream& fout) {
 	// Массив пробельных символов.
 	std::vector<char> spc_sym = { ' ', '\n', '\t' };
 	// Массив односимвольных лексем, которые используются в качестве разделителей.
@@ -74,7 +74,7 @@ hash_table<lexeme, hash_function_lex> lexical_analyzer::lex_analize(std::string 
 			// Если не ключевое, то запускаем автомат.
 			type_lex res = automat.process(temp);
 			if (res == ERROR) {
-				std::cout << "Error in " << temp << '\n';
+				fout << "Error in " << temp << '\n';
 				temp = "";
 				continue;
 			}
