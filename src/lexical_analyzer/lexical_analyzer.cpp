@@ -2,21 +2,21 @@
 #include <cctype>
 #include <algorithm>
 
-bool is_separators(char s) {
+bool lexical_analyzer::is_separators(char s) {
     std::vector<char> spr_sym = { '+', '-', '(', ')', '{', '}', ',', ';', '=' };
     return std::find(spr_sym.begin(), spr_sym.end(), s) != spr_sym.end();
 }
 
-bool is_separators(std::string& s) {
+bool lexical_analyzer::is_separators(std::string& s) {
     std::vector<std::string> spr_sym = { "+", "-", "(", ")", "{", "}", ",", ";", "=" };
     return std::find(spr_sym.begin(), spr_sym.end(), s) != spr_sym.end();
 }
 
-bool is_keyword(std::string& s) {
+bool lexical_analyzer::is_keyword(std::string& s) {
     return s == "int" || s == "return" || s == "char";
 }
 
-type_lexeme get_separator_type(std::string& s) {
+type_lexeme lexical_analyzer::get_separator_type(std::string& s) {
     if (s == "+") {
         return SUM;
     } else if (s == "-") {
@@ -39,7 +39,7 @@ type_lexeme get_separator_type(std::string& s) {
     return UNKNOWN;
 }
 
-type_lexeme get_keyword_type(std::string& s) {
+type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
     if (s == "return") {
         return RETURN;
     } else if (s == "int") {
