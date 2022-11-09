@@ -1,95 +1,101 @@
 #include "lexical_analyzer.h"
+#include <cctype>
+#include <algorithm>
 
-lexeme::lexeme(const type_lex& id, const char text) : _id(id) {
-	char* _txt = new char;
-	*_txt = text;
-	_text = std::string(_txt);
-	delete _txt;
+bool is_separators(char s) {
+    std::vector<char> spr_sym = { '+', '-', '(', ')', '{', '}', ',', ';', '=' };
+    return std::find(spr_sym.begin(), spr_sym.end(), s) != spr_sym.end();
 }
 
-std::ostream& operator<<(std::ostream& out, const lexeme& lex) {
-	std::string output ;
-	switch (lex._id) {
-		case KEYWORD:
-			output = "Keyword";
-			break;
-		case ID:
-			output = "Id";
-			break;
-		case NUM:
-			output = "Num";
-			break;
-		case SEPARATORS:
-			output = "Separators";
-			break;
-		case STRING:
-			output = "SimpleStringExpression";
-			break;
-		case ERROR:
-			output = "Error";
-			break;
-	}
-	out << output << ' ' << lex._text;
-	return out;
+bool is_separators(std::string& s) {
+    std::vector<std::string> spr_sym = { "+", "-", "(", ")", "{", "}", ",", ";", "=" };
+    return std::find(spr_sym.begin(), spr_sym.end(), s) != spr_sym.end();
 }
 
-// Хеш-функция для строк.
-int hash_function_lex::hash_function(const std::string& s, const int table_size, const int key) const {
-    int hash_result = 0;
-    for (unsigned int i = 0; i < s.length(); i++) {
-        hash_result = (key * hash_result + s[i]) % table_size;
+bool is_keyword(std::string& s) {
+    return s == "int" || s == "return" || s == "char";
+}
+
+type_lexeme get_separator_type(std::string& s) {
+    if (s == "+") {
+        return SUM;
+    } else if (s == "-") {
+        return MINUS;
+    } else if (s == "(") {
+        return LBRACKET;
+    } else if (s == ")") {
+        return RBRACKET;
+    } else if (s == "{") {
+        return LBRACKET_FIGURE;
+    } else if (s == "}") {
+        return RBRACKET_FIGURE;
+    } else if (s == ",") {
+        return COMMA;
+    } else if (s == ";") {
+        return SEMICOLON;
+    } else if (s == "=") {
+        return EQUALS;
     }
-    hash_result = (hash_result * 2 + 1) % table_size;
-    return hash_result;
+    return UNKNOWN;
 }
 
-int hash_function_lex::operator()(const lexeme& s, const int table_size) const {
-    return hash_function(s._text, table_size, _key);
+type_lexeme get_keyword_type(std::string& s) {
+    if (s == "return") {
+        return RETURN;
+    } else if (s == "int") {
+        return INT;
+    } else if (s == "char") {
+        return CHAR;
+    }
+    return UNKNOWN;
+}
+
+std::string lexical_analyzer::get_next_word() {
+    std::string word;
+    for ( ; _idx < _text.size(); _idx++) {
+        if (isspace(_text[_idx])) {
+            _idx++;
+            return word;
+        }
+        if (is_separators(_text[_idx])) {
+            if (word.empty()) {
+                word += _text[_idx];
+                _idx++;
+                return word;
+            }
+            return word;
+        }
+        word += _text[_idx];
+    }
+    return word;
 }
 
 // Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 // лексем.
-hash_table<lexeme, hash_function_lex> lexical_analyzer::lex_analize(std::string str, std::ofstream& fout) {
-	// Массив пробельных символов.
-	std::vector<char> spc_sym = { ' ', '\n', '\t' };
-	// Массив односимвольных лексем, которые используются в качестве разделителей.
-	std::vector<char> spr_sym = { '+', '-', '(', ')', '{', '}', ',', ';', '=' };
-	// Массив ключевых слов языка.
-	std::vector<std::string> keywords = { "return", "int", "char" };
-	hash_table<lexeme, hash_function_lex> res_table;
-	DFSM automat = DFSM();
-	std::string temp = "";
-	for (size_t i = 0; i < str.size(); i++) {
-		// Сначала проверяем не является-ли текущий символ пробельным или разделителем.
-		bool is_spc_sym = std::find(spc_sym.begin(), spc_sym.end(), str[i]) != spc_sym.end();
-		bool is_spr_sym = std::find(spr_sym.begin(), spr_sym.end(), str[i]) != spr_sym.end();
-		
-		if ((is_spc_sym || is_spr_sym) && (temp != "")) {
-			// В переменной temp накоплено слово. Проверяем, не ключевое-ли оно.
-			if (std::find(keywords.begin(), keywords.end(), temp) != keywords.end()) {
-				res_table.add(lexeme(KEYWORD, temp));
-				temp = "";
-				continue;
-			}
-			// Если не ключевое, то запускаем автомат.
-			type_lex res = automat.process(temp);
-			if (res == ERROR) {
-				fout << "Error in " << temp << '\n';
-				temp = "";
-				continue;
-			}
-			res_table.add(lexeme(res, temp));
-			temp = "";
-		}
-		// Если не пробельный и не разделитель, то накапливаем слово дальше.
-		if (! is_spc_sym && ! is_spr_sym) {
-			temp += str[i];
-		}
-		// Разделители тоже явялются лексемами, добавляем их.
-		if (is_spr_sym) {
-			res_table.add(lexeme(SEPARATORS, str[i]));
-		}
-	}
-	return res_table;
+hash_table lexical_analyzer::lex_analyze(std::ofstream& fout) {
+	hash_table res_table;
+    DFSM automat = DFSM();
+    while (_idx < _text.size()) {
+        std::string word = get_next_word();
+        if (word.empty()) {
+            continue;
+        }
+        if (is_separators(word)) {
+            token temp(get_separator_type(word), word);
+            res_table.add(temp);
+        } else if (is_keyword(word)) {
+            token temp(get_keyword_type(word), word);
+            res_table.add(temp);
+        } else {
+            type_lexeme type = automat.process(word);
+            if (type == UNKNOWN && _idx < _text.size()) {
+                fout << "Error in " << word << '\n';
+                continue;
+            }
+            token temp(type, word);
+            res_table.add(temp);
+        }
+    }
+    return res_table;
 }
 

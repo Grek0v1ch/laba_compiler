@@ -1,10 +1,16 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.23)
+project(laba_compiler)
 
-project(laba)
-add_compile_options(-std=c++11)
-add_compile_options(-g)
-add_compile_options(-Wall -Wextra -pedantic -Werror)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(laba src/main.cpp
-					src/lexical_analyzer/DFSM.cpp
-					src/lexical_analyzer/lexical_analyzer.cpp)
+add_executable(laba_compiler
+        src/main.cpp
+        src/token/token.cpp
+        src/lexical_analyzer/lexical_analyzer.cpp
+        src/lexical_analyzer/DFSM.cpp
+        src/hash_table/hash_table.cpp)
+
+target_include_directories(laba_compiler PUBLIC
+        src/hash_table
+        src/token
+        src/lexical_analyzer)

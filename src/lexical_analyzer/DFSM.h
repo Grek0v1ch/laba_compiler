@@ -3,16 +3,7 @@
 
 #include <vector>
 #include <string>
-
-// Тип лексем, допускаемых лексическим анализатором.
-enum type_lex {
-	KEYWORD,
-	ID,
-	NUM,
-	SEPARATORS,
-	STRING,
-	ERROR
-};
+#include "token.h"
 
 // Класс детерминированного конечного автомата для распознования лексем языка.
 class DFSM {
@@ -43,14 +34,14 @@ private:
 	table _table;
 
 	// Метод совершает "шаг" автомата - из состояния по символу переходит в новое состояние.
-	state function_step(const state, const event) const;
+	state function_step(state, event) const;
 	// Метод определяет тип символа.
-	event get_event(const char) const;
+	event get_event(char) const;
 
 public:
 	DFSM();
 	// Метод непосредственно моделирует работу автомата.
-	type_lex process(const std::string) const;
+	type_lexeme process(const std::string) const;
 };
 
 #endif // DFSM_H

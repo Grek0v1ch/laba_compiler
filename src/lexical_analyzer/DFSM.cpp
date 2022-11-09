@@ -50,14 +50,14 @@ DFSM::DFSM() : _table(table(COUNT_STATE, std::vector<state>(COUNT_EVENT))) {
 }
 
 // Метод непосредственно моделирует работу автомата.
-type_lex DFSM::process(const std::string lex) const {
+type_lexeme DFSM::process(const std::string lex) const {
 	state curr_state = st_0_start;
 	for (char symbol : lex) {
 		// Определяем тип символа.
 		event curr_event = get_event(symbol);
 		// Если символ не распознается, то заканчиваем с ошибкой.
 		if (curr_event == event_error) {
-			return ERROR;
+			return UNKNOWN;
 		}
 		// Делаем переход к новому состоянию.
 		curr_state = function_step(curr_state, curr_event);
@@ -67,10 +67,10 @@ type_lex DFSM::process(const std::string lex) const {
 		case st_1_end_id:
 			return ID;
 		case st_2_end_num:
-			return NUM;
+			return NUMBER;
 		case st_5_end_string:
-			return STRING;
+			return SIMPLE_STRING;
 		default:
-			return ERROR;
+			return UNKNOWN;
 	}
 }
