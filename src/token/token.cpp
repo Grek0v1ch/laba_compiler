@@ -10,6 +10,15 @@ bool token::operator==(const token& v) const& {
     return _type == v._type && _text == v._text;
 }
 
+token& token::operator=(const token& v) {
+    if (&v == this) {
+        return *this;
+    }
+    _type = v._type;
+    _text = v._text;
+    return *this;
+}
+
 std::ostream& operator<<(std::ostream& out, const token& v) {
     std::string output;
     switch (v._type) {

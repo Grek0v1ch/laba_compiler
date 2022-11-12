@@ -29,6 +29,7 @@ public:
     type_lexeme type() const { return _type; }
 
     bool operator==(const token& v) const&;
+    token& operator=(const token& v);
     friend std::ostream& operator<<(std::ostream& out, const token& v);
 };
 
