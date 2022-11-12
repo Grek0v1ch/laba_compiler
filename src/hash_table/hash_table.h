@@ -38,8 +38,8 @@ public:
 
     size_t size() const { return _size; }
 
-    void add(token& value);
-    void remove(token& value);
+    void add(token value);
+    void remove(token value);
 
     type_lexeme find_lexeme(std::string& text);
 

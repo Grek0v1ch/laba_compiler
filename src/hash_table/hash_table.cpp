@@ -32,7 +32,7 @@ hash_table::~hash_table() {
     _arr.clear();
 }
 
-void hash_table::add(token& value) {
+void hash_table::add(token value) {
     if (REHASH <= (_size * 1.0 / _arr.size())) {
         rehash();
     }
@@ -52,7 +52,7 @@ void hash_table::add(token& value) {
     }
 }
 
-void hash_table::remove(token& value) {
+void hash_table::remove(token value) {
     size_t idx = hash_function(value.text(), _arr.size());
     while (_arr[idx] != nullptr) {
         if (_arr[idx]->_key == value) {
