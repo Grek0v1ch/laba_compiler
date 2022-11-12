@@ -47,7 +47,7 @@ int main(int argc, char const *argv[]) {
 
 	std::string all_text = get_all_text(fin);
     lexical_analyzer analyzer(all_text);
-	hash_table res = analyzer.lex_analyze(fout);
+	hash_table res = analyzer.lex_analyze();
 	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
 	output_result(res_to_arr, fout);
 	

@@ -70,31 +70,32 @@ std::string lexical_analyzer::get_next_word() {
     return word;
 }
 
+token lexical_analyzer::get_next_token() {
+    std::string curr_word = get_next_word();
+    if (curr_word.empty()) {
+        return {};
+    }
+    if (is_separators(curr_word)) {
+        return {get_separator_type(curr_word), curr_word};
+    }
+    if (is_keyword(curr_word)) {
+        return {get_keyword_type(curr_word), curr_word};
+    }
+    DFSM automat;
+    return {automat.process(curr_word), curr_word};
+}
+
 // Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 // лексем.
-hash_table lexical_analyzer::lex_analyze(std::ofstream& fout) {
+hash_table lexical_analyzer::lex_analyze() {
 	hash_table res_table;
     DFSM automat = DFSM();
     while (_idx < _text.size()) {
-        std::string word = get_next_word();
-        if (word.empty()) {
+        token curr = get_next_token();
+        if (curr.text().empty()) {
             continue;
         }
-        if (is_separators(word)) {
-            token temp(get_separator_type(word), word);
-            res_table.add(temp);
-        } else if (is_keyword(word)) {
-            token temp(get_keyword_type(word), word);
-            res_table.add(temp);
-        } else {
-            type_lexeme type = automat.process(word);
-            if (type == UNKNOWN && _idx < _text.size()) {
-                fout << "Error in " << word << '\n';
-                continue;
-            }
-            token temp(type, word);
-            res_table.add(temp);
-        }
+        res_table.add(curr);
     }
     return res_table;
 }
