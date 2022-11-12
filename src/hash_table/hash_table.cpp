@@ -25,6 +25,16 @@ size_t hash_table::hash_function(const std::string& s, const size_t table_size) 
     return hash_result;
 }
 
+hash_table::hash_table(const hash_table& v) : _size(v._size) {
+    _arr = std::vector<pnode>(v._arr.size());
+    for (size_t i = 0; i < v._arr.size(); i++) {
+        if (v._arr[i] == nullptr) {
+            continue;
+        }
+        _arr[i] = new node(v._arr[i]->_key, v._arr[i]->_is_del);
+    }
+}
+
 hash_table::~hash_table() {
     for (auto & item : _arr) {
         delete item;

@@ -34,6 +34,7 @@ private:
 
 public:
     hash_table() : _size(0), _arr(std::vector<pnode>(DEFAULT_SIZE, nullptr)) {}
+    hash_table(const hash_table& v);
     ~hash_table();
 
     size_t size() const { return _size; }
