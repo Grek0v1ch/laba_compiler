@@ -10,8 +10,7 @@
 
 // Класс лексического анализатора.
 class lexical_analyzer {
-    std::string _text;
-    size_t _idx;
+    std::ifstream _input;
 
     bool is_separators(char s);
     bool is_separators(std::string& s);
@@ -21,7 +20,9 @@ class lexical_analyzer {
     std::string get_next_word();
     token get_next_token();
 public:
-    lexical_analyzer(std::string& text) : _text(std::move(text)), _idx(0) {}
+    lexical_analyzer(const char* file_name) : _input(std::ifstream(file_name)) {}
+    lexical_analyzer(std::string& file_name) : _input(std::ifstream(file_name)) {}
+    ~lexical_analyzer() { _input.close(); }
 	// Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 	// лексем.
     hash_table lex_analyze();

@@ -52,20 +52,23 @@ type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
 
 std::string lexical_analyzer::get_next_word() {
     std::string word;
-    for ( ; _idx < _text.size(); _idx++) {
-        if (isspace(_text[_idx])) {
-            _idx++;
+    while (true) {
+        char s;
+        _input >> s;
+        if (_input.eof()) {
+            break;
+        }
+        if (isspace(s)) {
             return word;
         }
-        if (is_separators(_text[_idx])) {
+        if (is_separators(s)) {
             if (word.empty()) {
-                word += _text[_idx];
-                _idx++;
+                word += s;
                 return word;
             }
             return word;
         }
-        word += _text[_idx];
+        word += s;
     }
     return word;
 }
@@ -90,8 +93,11 @@ token lexical_analyzer::get_next_token() {
 hash_table lexical_analyzer::lex_analyze() {
 	hash_table res_table;
     DFSM automat = DFSM();
-    while (_idx < _text.size()) {
+    while (true) {
         token curr = get_next_token();
+        if (_input.eof()) {
+            break;
+        }
         if (curr.text().empty()) {
             continue;
         }

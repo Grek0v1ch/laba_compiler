@@ -44,9 +44,8 @@ int main(int argc, char const *argv[]) {
 		std::cout << "Enter one correct file for read and one correct file for write\n";
 		return 0;
 	}
-
 	std::string all_text = get_all_text(fin);
-    lexical_analyzer analyzer(all_text);
+    lexical_analyzer analyzer(argv[1]);
 	hash_table res = analyzer.lex_analyze();
 	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
 	output_result(res_to_arr, fout);
