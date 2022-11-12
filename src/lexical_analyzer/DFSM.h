@@ -41,7 +41,7 @@ private:
 public:
 	DFSM();
 	// Метод непосредственно моделирует работу автомата.
-	type_lexeme process(const std::string) const;
+	type_lexeme process(std::string) const;
 };
 
 #endif // DFSM_H
