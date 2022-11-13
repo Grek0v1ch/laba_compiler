@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 
+// Типы лексем
 enum type_lexeme {
     UNKNOWN,
     RETURN, INT, CHAR,
