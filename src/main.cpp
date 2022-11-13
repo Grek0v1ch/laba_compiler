@@ -9,14 +9,26 @@ bool cmp(const std::pair<size_t, token>& first, const std::pair<size_t, token>& 
 	return first.second.type() < second.second.type();
 }
 
+bool is_open_input(const char* input) {
+    std::ifstream fin(input);
+    bool res = fin.is_open();
+    fin.close();
+    return res;
+}
+
+bool is_open_output(const char* output) {
+    std::ofstream fout(output);
+    bool res = fout.is_open();
+    fout.close();
+    return res;
+}
+
 // Функция проверяет, открылись ли файлы на чтение и запись.
-bool open_file(int argc, char const *argv[], std::ifstream& fin, std::ofstream& fout) {
+bool open_file(int argc, char const *argv[]) {
 	if (argc != 3) {
 		return false;
 	}
-	fin = std::ifstream(argv[1]);
-	fout = std::ofstream(argv[2]);
-	return fin.is_open() && fout.is_open();
+    return is_open_input(argv[1]) && is_open_output(argv[2]);
 }
 
 // Функция получает весь текст из файла.
@@ -38,19 +50,16 @@ void output_result(std::vector<std::pair<size_t, token>>& res_to_arr, std::ofstr
 }
 
 int main(int argc, char const *argv[]) {
-	std::ifstream fin;
-	std::ofstream fout;
-	if (! open_file(argc, argv, fin, fout)) {
+	if (! open_file(argc, argv)) {
 		std::cout << "Enter one correct file for read and one correct file for write\n";
 		return 0;
 	}
-	std::string all_text = get_all_text(fin);
+    std::ofstream fout(argv[2]);
     lexical_analyzer analyzer(argv[1]);
-	hash_table res = analyzer.lex_analyze();
+	hash_table res = analyzer.get_all_tokens();
 	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
 	output_result(res_to_arr, fout);
 	
-	fin.close();
 	fout.close();
 	return 0;
 }
