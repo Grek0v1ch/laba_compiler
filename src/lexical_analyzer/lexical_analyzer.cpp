@@ -54,7 +54,7 @@ std::string lexical_analyzer::get_next_word() {
     std::string word;
     while (true) {
         char s;
-        _input >> s;
+        _input.get(s);
         if (_input.eof()) {
             break;
         }
@@ -66,6 +66,7 @@ std::string lexical_analyzer::get_next_word() {
                 word += s;
                 return word;
             }
+            _input.unget();
             return word;
         }
         word += s;
@@ -90,7 +91,7 @@ token lexical_analyzer::get_next_token() {
 
 // Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 // лексем.
-hash_table lexical_analyzer::lex_analyze() {
+hash_table lexical_analyzer::get_all_tokens() {
 	hash_table res_table;
     DFSM automat = DFSM();
     while (true) {

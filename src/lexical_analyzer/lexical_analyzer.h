@@ -18,14 +18,14 @@ class lexical_analyzer {
     type_lexeme get_separator_type(std::string& s);
     type_lexeme get_keyword_type(std::string& s);
     std::string get_next_word();
-    token get_next_token();
 public:
     lexical_analyzer(const char* file_name) : _input(std::ifstream(file_name)) {}
     lexical_analyzer(std::string& file_name) : _input(std::ifstream(file_name)) {}
     ~lexical_analyzer() { _input.close(); }
 	// Класс имеет всего лишь один метод, который принимает текст и возвращает хеш-таблицу
 	// лексем.
-    hash_table lex_analyze();
+    hash_table get_all_tokens();
+    token get_next_token();
 };
 
 #endif // LEXICAL_ANALYZER_H
