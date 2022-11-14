@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "hash_table.h"
 #include "lexical_analyzer.h"
+#include "parser.h"
 
 // Функция проверяет, можно ли открыть файл на запись
 bool is_open_output(const char* output);
@@ -25,7 +26,10 @@ int main(int argc, char const *argv[]) {
 	hash_table res = analyzer.get_all_tokens();
 	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
 	output_result(res_to_arr, fout);
-	
+
+    parser par(argv[1]);
+    par.run();
+
 	fout.close();
 	return 0;
 }
