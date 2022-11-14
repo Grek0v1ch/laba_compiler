@@ -1,0 +1,37 @@
+Function -> Begin Description Operators End
+Begin -> Type FunctionName() {
+End -> return Id ; }
+FunctionName -> Id
+Description -> Descr | Descr Description
+Descr -> Type VarList;
+Type -> int | char
+VarList -> Id | Id , VarList
+Operators -> Op | Op Operators
+Op -> Id = NumExpr; | Id = StringExpr;
+NumExpr -> SimpleNumExpr | SimpleNumExpr + NumExpr | SimpleNumExpr - NumExpr
+SimpleNumExpr -> Id | Const | (NumExpr)
+Id -> Letter | Letter Id
+Const -> Digit | Digit Const
+StringExpr -> SimpleStringExpr | SimpleStringExpr + StringExpr
+SimpleStringExpr -> "String"
+String -> Letter | Digit | Letter String | Digit String
+Digit -> 0 | 1 | ... | 9
+Letter -> a | b | ... | z | A | B | ... | Z
+
+
+Grammar for parser
+
+Function -> Begin Description Operators End
+Begin -> Type FunctionName() {
+End -> return Id ; }
+FunctionName -> Id
+Description -> Descr | Descr Description
+Descr -> Type VarList;
+Type -> int | char
+VarList -> Id | Id , VarList
+Operators -> Op | Op Operators
+Op -> Id = NumExpr; | Id = StringExpr;
+NumExpr -> SimpleNumExpr | SimpleNumExpr + NumExpr | SimpleNumExpr - NumExpr
+SimpleNumExpr -> Id | Const | (NumExpr)
+StringExpr -> SimpleStringExpr | SimpleStringExpr + StringExpr
+SimpleStringExpr -> "String"
