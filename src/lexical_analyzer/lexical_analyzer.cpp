@@ -2,6 +2,15 @@
 #include <cctype>
 #include <algorithm>
 
+void lexical_analyzer::update_position(const char s) {
+    if (s == '\n') {
+        _pos._data.push_back(0);
+    } else {
+        (*_pos._data.rbegin())++;
+    }
+    _pos._last_word += s;
+}
+
 // Метод проверяет, что символ является символом разделителем (односимвольной лексемой)
 bool lexical_analyzer::is_separators(char s) {
     std::vector<char> spr_sym = { '+', '-', '(', ')', '{', '}', ',', ';', '=' };
@@ -58,6 +67,7 @@ type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
 // Метод получает следующее по тексту слово
 std::string lexical_analyzer::get_next_word() {
     std::string word;
+    _pos._last_word = "";
     while (true) {
         char s;
         _input.get(s);
@@ -65,6 +75,7 @@ std::string lexical_analyzer::get_next_word() {
         if (_input.eof()) {
             break;
         }
+        update_position(s);
         // Если это пробельный символ, то возвращаем накопленное слово.
         // Если накопленное слово пусто, то продолжаем накапливать
         if (isspace(s)) {
@@ -83,11 +94,19 @@ std::string lexical_analyzer::get_next_word() {
                 return word;
             }
             _input.unget();
+            (*_pos._data.rbegin())--;
             return word;
         }
         word += s;
     }
     return word;
+}
+
+lexical_analyzer::lexical_analyzer(const char* file_name) {
+    std::ifstream fin(file_name);
+    _input << fin.rdbuf();
+    fin.close();
+    _pos._data = std::vector<int>(1);
 }
 
 // Метод возвращает следующий по тексту токен
@@ -106,6 +125,21 @@ token lexical_analyzer::get_next_token() {
     return {automat.process(curr_word), curr_word};
 }
 
+void lexical_analyzer::return_last_word() {
+    std::reverse(_pos._last_word.begin(), _pos._last_word.end());
+    for (const char& s : _pos._last_word) {
+        if (s == '\n' || (*_pos._data.rbegin()) == 0) {
+            _pos._data.pop_back();
+        } else {
+            (*_pos._data.rbegin())--;
+        }
+        _input.putback(s);
+    }
+    if ((*_pos._data.rbegin()) == 0) {
+        _pos._data.pop_back();
+    }
+}
+
 // Метод возвращает хеш таблицу со всеми лексемами прочитанными из файла
 hash_table lexical_analyzer::get_all_tokens() {
     DFSM automat = DFSM();
@@ -121,4 +155,3 @@ hash_table lexical_analyzer::get_all_tokens() {
     }
     return _tokens;
 }
-
