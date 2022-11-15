@@ -27,7 +27,17 @@ public:
         if (! operators()) {
             return false;
         }
-        return end();
+        if (! end()) {
+            return false;
+        }
+        token curr = _tokens.get_next_token();
+        if (curr.type() == UNKNOWN && curr.text().empty()) {
+            return true;
+        }
+        position curr_pos = _tokens.position();
+        std::cout << curr_pos._data.size() << ':' << *curr_pos._data.rbegin() << ' ';
+        std::cout << "Error: no more one function\n";
+        return false;
     }
 
     bool begin() {
