@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include "lexical_item.h"
 
 // Типы лексем
 enum type_lexeme {
@@ -15,7 +16,7 @@ enum type_lexeme {
 };
 
 // Класс токена. Токен - это пара (тип_лексемы, лексема)
-class token {
+class token : public lexical_item {
 private:
     type_lexeme _type;
     std::string _text;
@@ -28,6 +29,8 @@ public:
 
     std::string text() const { return _text; }
     type_lexeme type() const { return _type; }
+
+    void print(std::ostream& out) const override;
 
     bool operator==(const token& v) const&;
     token& operator=(const token& v);
