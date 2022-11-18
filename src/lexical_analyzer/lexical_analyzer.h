@@ -29,9 +29,9 @@ class lexical_analyzer {
     bool is_separators(std::string& s);
     // Метод проверяет, является ли слово ключевым (это слова int, char, return)
     bool is_keyword(std::string& s);
-    // Метод возвращает тип лексемы разделителя (типы лексем объявлены в файле token.h)
+    // Метод возвращает тип лексемы разделителя (типы лексем объявлены в файле lexical_item.h)
     type_lexeme get_separator_type(std::string& s);
-    // Метод возвращает тип ключевого слова (типы лексем объявлены в файле token.h)
+    // Метод возвращает тип ключевого слова (типы лексем объявлены в файле lexical_item.h)
     type_lexeme get_keyword_type(std::string& s);
     // Метод получает следующее по тексту слово
     std::string get_next_word();

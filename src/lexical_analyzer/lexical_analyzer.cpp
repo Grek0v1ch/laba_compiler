@@ -28,7 +28,7 @@ bool lexical_analyzer::is_keyword(std::string& s) {
     return s == "int" || s == "return" || s == "char";
 }
 
-// Метод возвращает тип лексемы разделителя (типы лексем объявлены в файле token.h)
+// Метод возвращает тип лексемы разделителя (типы лексем объявлены в файле lexical_item.h)
 type_lexeme lexical_analyzer::get_separator_type(std::string& s) {
     if (s == "+") {
         return SUM;
@@ -52,7 +52,7 @@ type_lexeme lexical_analyzer::get_separator_type(std::string& s) {
     return UNKNOWN;
 }
 
-// Метод возвращает тип ключевого слова (типы лексем объявлены в файле token.h)
+// Метод возвращает тип ключевого слова (типы лексем объявлены в файле lexical_item.h)
 type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
     if (s == "return") {
         return RETURN;
