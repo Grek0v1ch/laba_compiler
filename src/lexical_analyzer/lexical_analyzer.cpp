@@ -67,7 +67,7 @@ type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
 // Метод получает следующее по тексту слово
 std::string lexical_analyzer::get_next_word() {
     std::string word;
-    _pos._last_word = "";
+    _pos._last_word.clear();
     while (true) {
         char s;
         _input.get(s);
@@ -93,7 +93,13 @@ std::string lexical_analyzer::get_next_word() {
                 word += s;
                 return word;
             }
+            // Если был прочитан символ разделитель, то так как он является отдельным словом
+            // его надо вернуть в поток и удалить из последнего прочитанного слова
             _input.unget();
+            // Тут такой способ удаления, потому что erase удалял тупо последнюю ячейку
+            // в массиве символов, а он почему-то состоит из 23 ячеек
+            _pos._last_word = _pos._last_word.substr(0, _pos._last_word.size() - 1);
+            // Уменьшаем позицию в строке
             (*_pos._data.rbegin())--;
             return word;
         }

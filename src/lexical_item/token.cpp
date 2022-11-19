@@ -1,9 +1,5 @@
 #include "token.h"
 
-void token::print(std::ostream& out) const {
-    out << *this;
-}
-
 token::token(const type_lexeme& type, const char text) {
     _type = type;
     _text = std::string();

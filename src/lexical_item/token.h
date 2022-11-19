@@ -30,7 +30,7 @@ public:
     std::string text() const { return _text; }
     type_lexeme type() const { return _type; }
 
-    void print(std::ostream& out) const override;
+    std::string class_name() const override { return {"token"}; }
 
     bool operator==(const token& v) const&;
     token& operator=(const token& v);

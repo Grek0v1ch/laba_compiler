@@ -2,11 +2,13 @@
 #define LEXICAL_ITEM_H
 
 #include <iostream>
+#include <string>
 
 class lexical_item {
 public:
     virtual ~lexical_item() {}
-    virtual void print(std::ostream& out) const = 0;
+
+    virtual std::string class_name() const = 0;
 };
 
 #endif // LEXICAL_ITEM_H

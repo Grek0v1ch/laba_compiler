@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(laba_compiler)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 add_executable(laba_compiler
         src/main.cpp
@@ -20,7 +20,8 @@ target_include_directories(laba_compiler PUBLIC
 add_executable(tree_test
         src/lexical_item/token.cpp
         src/parse_tree/main.cpp
-        src/parse_tree/parse_tree.cpp)
+        src/parse_tree/parse_tree.cpp
+        src/lexical_item/terminal.cpp)
 
 target_include_directories(tree_test PUBLIC
         src/lexical_item
