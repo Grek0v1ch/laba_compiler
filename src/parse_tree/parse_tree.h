@@ -97,7 +97,7 @@ private:
         if (! pos) {
             return false;
         }
-        if (pos->_value->class_name() == "terminal") {
+        if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
             terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
             if (temp.type() == to_add.type()) {
                 pos->_children.push_back(std::make_shared<node>(v));
@@ -116,7 +116,7 @@ private:
         if (! pos) {
             return false;
         }
-        if (pos->_value->class_name() == "terminal") {
+        if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
             terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
             if (temp.type() == to_add.type()) {
                 push_product_item(pos->_children, product);

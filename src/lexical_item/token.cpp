@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& out, const token& v) {
     std::string output;
     switch (v._type) {
         case RETURN:
-            output = "Return";
+            output = "Keyword Return";
             break;
         case INT:
             output = "Keyword Int";
