@@ -4,35 +4,41 @@
 #include "lexical_item.h"
 #include "token.h"
 #include "terminal.h"
+#include <iostream>
+#include <utility>
 #include <vector>
 
 using ptr_lexi = std::shared_ptr<lexical_item>;
 class parse_tree;
 
-class node {
+class tree_node {
 public:
-    node() : _value(nullptr), _children(std::vector<std::shared_ptr<node>>()) {}
+    tree_node() : _value(nullptr), _children(std::vector<std::shared_ptr<tree_node>>()) {}
 
-    node(const terminal& v) :
+    tree_node(const terminal& v) :
         _value(std::static_pointer_cast<lexical_item>(std::make_shared<terminal>(v))),
-        _children(std::vector<std::shared_ptr<node>>()) {}
+        _children(std::vector<std::shared_ptr<tree_node>>()) {}
 
-    node(const token& v) :
+    tree_node(const token& v) :
         _value(std::static_pointer_cast<lexical_item>(std::make_shared<token>(v))),
-        _children(std::vector<std::shared_ptr<node>>()) {}
+        _children(std::vector<std::shared_ptr<tree_node>>()) {}
 
-    node(const node& v);
+    tree_node(std::shared_ptr<lexical_item>  v) :
+        _value(std::move(v)),
+        _children(std::vector<std::shared_ptr<tree_node>>()) {}
 
-    ~node() = default;
+    tree_node(const tree_node& v);
+
+    ~tree_node() = default;
 
     friend class parse_tree;
 
 private:
     ptr_lexi _value;
-    std::vector<std::shared_ptr<node>> _children;
+    std::vector<std::shared_ptr<tree_node>> _children;
 };
 
-using pnode = std::shared_ptr<node>;
+using ptree_node = std::shared_ptr<tree_node>;
 
 class parse_tree {
 public:
@@ -53,10 +59,12 @@ public:
         SIMPLE_STRING_EXPR
     };
 
-    parse_tree() : _root(std::make_shared<node>(node{terminal{terminal::FUNCTION}})) {}
-    parse_tree(const terminal& root) : _root(std::make_shared<node>(node{root})) {}
+    parse_tree() : _root(std::make_shared<tree_node>(tree_node{terminal{terminal::FUNCTION}})) {}
+    parse_tree(const terminal& root) : _root(std::make_shared<tree_node>(tree_node{root})) {}
     ~parse_tree() = default;
     void print(std::ostream& out) { print(out,_root, 0); }
+    void insert_tree(const terminal& to_add, const parse_tree& tree) {
+        insert_tree(to_add, tree, _root); }
     void add_tree(const terminal& to_add, const parse_tree& tree) {
         add_tree(to_add, tree, _root); }
     void add_token(const terminal& to_add, const token& v) {
@@ -64,15 +72,16 @@ public:
     void add_product(const terminal& to_add, const type_product& product) {
         add_product(to_add, product, _root); }
 private:
-    pnode _root;
+    ptree_node _root;
 
-    void print (std::ostream& out, const pnode& pos, size_t level);
-    void add_tree(const terminal& to_add, const parse_tree& tree, const pnode& pos);
-    void copy_tree(pnode& to, pnode from);
+    void print (std::ostream& out, const ptree_node& pos, size_t level);
+    void insert_tree(const terminal& to_add, const parse_tree& tree, const ptree_node& pos);
+    void add_tree(const terminal& to_add, const parse_tree& tree, const ptree_node& pos);
+    void copy_tree(ptree_node& to, ptree_node from);
     // Метод добавления токена в дерево
-    bool add_token(const terminal& to_add, const token& v, pnode& pos);
-    bool add_product(const terminal& to_add, type_product product, pnode& pos);
-    void push_product_item(std::vector<std::shared_ptr<node>>& children, type_product product);
+    bool add_token(const terminal& to_add, const token& v, ptree_node& pos);
+    bool add_product(const terminal& to_add, type_product product, ptree_node& pos);
+    void push_product_item(std::vector<std::shared_ptr<tree_node>>& children, type_product product);
 };
 
 

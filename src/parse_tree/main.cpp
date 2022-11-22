@@ -19,7 +19,8 @@ int main() {
     descr_tree.add_token(terminal::ID, token{ID, "a"});
 
 
-    tree.add_tree(terminal::DESCRIPTION, descr_tree);
+    tree.add_product(terminal::DESCRIPTION, parse_tree::DESCRIPTION_1);
+    tree.insert_tree(terminal::DESCR, descr_tree);
 
     tree.add_product(terminal::OPERATORS, parse_tree::OPERATORS_1);
     tree.add_product(terminal::OP, parse_tree::OP_1);
