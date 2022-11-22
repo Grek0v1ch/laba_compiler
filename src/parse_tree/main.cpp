@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 
 #include "terminal.h"
 #include "token.h"
@@ -13,11 +12,14 @@ int main() {
     tree.add_product(terminal::FUNCTION_NAME, parse_tree::FUNCTION_NAME);
     tree.add_token(terminal::ID, token{ID, "main"});
 
-    tree.add_product(terminal::DESCRIPTION, parse_tree::DESCRIPTION_1);
-    tree.add_product(terminal::DESCR, parse_tree::DESCR);
-    tree.add_product(terminal::TYPE, parse_tree::TYPE_1);
-    tree.add_product(terminal::VAR_LIST, parse_tree::VAR_LIST_1);
-    tree.add_token(terminal::ID, token{ID, "a"});
+    parse_tree descr_tree(terminal::DESCR);
+    descr_tree.add_product(terminal::DESCR, parse_tree::DESCR);
+    descr_tree.add_product(terminal::TYPE, parse_tree::TYPE_1);
+    descr_tree.add_product(terminal::VAR_LIST, parse_tree::VAR_LIST_1);
+    descr_tree.add_token(terminal::ID, token{ID, "a"});
+
+
+    tree.add_tree(terminal::DESCRIPTION, descr_tree);
 
     tree.add_product(terminal::OPERATORS, parse_tree::OPERATORS_1);
     tree.add_product(terminal::OP, parse_tree::OP_1);
@@ -30,4 +32,5 @@ int main() {
     tree.add_token(terminal::ID, token{ID, "a"});
 
     tree.print(std::cout);
+    descr_tree.print(std::cout);
 }
