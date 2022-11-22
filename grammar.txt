@@ -34,9 +34,3 @@ Op -> Id = NumExpr; | Id = StringExpr;
 NumExpr -> SimpleNumExpr | SimpleNumExpr + NumExpr | SimpleNumExpr - NumExpr
 SimpleNumExpr -> Id | Const | (NumExpr)
 StringExpr -> SimpleStringExpr | SimpleStringExpr + StringExpr
-
-int main() {
-    int a;
-    a = 1;
-	return a;
-}

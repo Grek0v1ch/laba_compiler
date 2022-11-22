@@ -122,12 +122,15 @@ token lexical_analyzer::get_next_token() {
         return {};
     }
     if (is_separators(curr_word)) {
+        _tokens.add({get_separator_type(curr_word), curr_word});
         return {get_separator_type(curr_word), curr_word};
     }
     if (is_keyword(curr_word)) {
+        _tokens.add({get_keyword_type(curr_word), curr_word});
         return {get_keyword_type(curr_word), curr_word};
     }
     DFSM automat;
+    _tokens.add({automat.process(curr_word), curr_word});
     return {automat.process(curr_word), curr_word};
 }
 

@@ -22,13 +22,17 @@ int main(int argc, char const *argv[]) {
 		return 0;
 	}
     std::ofstream fout(argv[2]);
-    lexical_analyzer analyzer(argv[1]);
-	hash_table res = analyzer.get_all_tokens();
-	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
-	output_result(res_to_arr, fout);
-
     parser par(argv[1]);
-    par.run();
+    if (par.run()) {
+        hash_table res = par.get_hash_table();
+	    std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
+	    output_result(res_to_arr, fout);
+        fout << "\n\n\n\n";
+        par.print_parse_tree(fout);
+        std::cout << "No error\n";
+    } else {
+        std::cout << "Error\n";
+    }
 
 	fout.close();
 	return 0;

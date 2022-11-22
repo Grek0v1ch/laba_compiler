@@ -61,7 +61,9 @@ public:
 
     parse_tree() : _root(std::make_shared<tree_node>(tree_node{terminal{terminal::FUNCTION}})) {}
     parse_tree(const terminal& root) : _root(std::make_shared<tree_node>(tree_node{root})) {}
+    parse_tree(const parse_tree& v) { copy_tree(_root, v._root); }
     ~parse_tree() = default;
+    void clear() { _root->_children.clear(); }
     void print(std::ostream& out) { print(out,_root, 0); }
     void insert_tree(const terminal& to_add, const parse_tree& tree) {
         insert_tree(to_add, tree, _root); }
