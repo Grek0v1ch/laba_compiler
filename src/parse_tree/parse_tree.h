@@ -77,7 +77,7 @@ private:
     ptree_node _root;
 
     void print (std::ostream& out, const ptree_node& pos, size_t level);
-    void insert_tree(const terminal& to_add, const parse_tree& tree, const ptree_node& pos);
+    void insert_tree(const terminal& to_add, const parse_tree& tree, ptree_node& pos);
     void add_tree(const terminal& to_add, const parse_tree& tree, const ptree_node& pos);
     void copy_tree(ptree_node& to, ptree_node from);
     // Метод добавления токена в дерево

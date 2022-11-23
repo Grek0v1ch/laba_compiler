@@ -1,7 +1,6 @@
 #include <vector>
 #include <algorithm>
 #include "hash_table.h"
-#include "lexical_analyzer.h"
 #include "parser.h"
 
 // Функция проверяет, можно ли открыть файл на запись

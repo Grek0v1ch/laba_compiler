@@ -33,19 +33,19 @@ void parse_tree::print (std::ostream& out, const ptree_node& pos, size_t level) 
     }
 }
 
-void parse_tree::insert_tree(const terminal& to_add, const parse_tree& tree, const ptree_node& pos) {
+void parse_tree::insert_tree(const terminal& to_add, const parse_tree& tree, ptree_node& pos) {
     if (! pos) {
         return;
     }
-    for (auto& item : pos->_children) {
-        if (item->_value->class_name() == "terminal" && item->_children.empty()) {
-            terminal temp = *std::dynamic_pointer_cast<terminal>(item->_value);
-            if (temp.type() == to_add.type()) {
-                item = nullptr;
-                copy_tree(item, tree._root);
-                return;
-            }
+    if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
+        terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
+        if (temp.type() == to_add.type()) {
+            pos = nullptr;
+            copy_tree(pos, tree._root);
+            return;
         }
+    }
+    for (auto& item : pos->_children) {
         insert_tree(to_add, tree, item);
     }
 }
