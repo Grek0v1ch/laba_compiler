@@ -18,9 +18,12 @@ tree_node::tree_node(const tree_node& v) {
 void parse_tree::print (std::ostream& out, const ptree_node& pos, size_t level) {
     // Не нужно отслеживать pos == nullptr так как корень всегда инициализирован, а если у
     // какого-то элемента дерева нет детей, то мы просто не заходим в цикл по его детям
+
+    // Сначала выводим текущий сдвиг
     for (size_t i = 0; i < level; i++) {
         out << '\t';
     }
+    // Далее выводим текущий корень поддерева (на него указывает pos)
     if (pos->_value->class_name() == "terminal") {
         terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
         out << temp << '\n';
@@ -28,64 +31,82 @@ void parse_tree::print (std::ostream& out, const ptree_node& pos, size_t level) 
         token temp = *std::dynamic_pointer_cast<token>(pos->_value);
         out << temp << '\n';
     }
+    // После этого печатаем все поддеревья, которые являются дочерними к корню pos
     for (auto& item : pos->_children) {
         print(out, item, level + 1);
     }
 }
 
 void parse_tree::insert_tree(const terminal& to_add, const parse_tree& tree, ptree_node& pos) {
+    // Если мы пришли в пустое поддерево, то просто выходим из него
+    // (по идее такая ситуация невозможно, но проверка была вставлена для безопасности)
     if (! pos) {
         return;
     }
+    // Если это корень содержит терминал и у него нет детей, то в него возможна вставка
     if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
         terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
+        // Проверяем, нужный ли это терминал
         if (temp.type() == to_add.type()) {
+            // Если нужный, то текущий корень очищаем и вставляем в него дерево
             pos = nullptr;
             copy_tree(pos, tree._root);
             return;
         }
     }
+    // Если в текущее поддерево вставить невозможно, то пытаемся вставить в дочерние поддеревья
     for (auto& item : pos->_children) {
         insert_tree(to_add, tree, item);
     }
 }
 
 void parse_tree::add_tree(const terminal& to_add, const parse_tree& tree, const ptree_node& pos) {
+    // Если мы пришли в пустое поддерево, то просто выходим из него
+    // (по идее такая ситуация невозможно, но проверка была вставлена для безопасности)
     if (! pos) {
         return;
     }
+    // Если это корень содержит терминал и у него нет детей, то к нему возможно добавление
     if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
         terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
         if (temp.type() == to_add.type()) {
+            // Если нужный, то к текущему дереву добавляем ребенка, в которого копируем дерево
             pos->_children.push_back(std::make_shared<tree_node>());
             copy_tree(*pos->_children.begin(), tree._root);
             return;
         }
     }
+    // Если к текущему поддереву добавить невозможно, то пытаемся добавить к дочерним поддеревьям
     for (const auto& item : pos->_children) {
         add_tree(to_add, tree, item);
     }
 }
 
-void parse_tree::copy_tree(ptree_node& to, ptree_node from) {
+void parse_tree::copy_tree(ptree_node& to, const ptree_node& from) {
+    // Заменяем корни поддеревьев
     to = std::make_shared<tree_node>(*from);
+    // Далее осуществляем копирование дочерний поддеревьев
     for (size_t i = 0; i < from->_children.size(); i++) {
         copy_tree(to->_children[i], from->_children[i]);
     }
 }
 
-// Метод добавления токена в дерево
 bool parse_tree::add_token(const terminal& to_add, const token& v, ptree_node& pos) {
+    // Если мы пришли в пустое поддерево, то просто выходим из него
+    // (по идее такая ситуация невозможно, но проверка была вставлена для безопасности)
     if (! pos) {
         return false;
     }
+    // Если это корень содержит терминал и у него нет детей, то к нему возможно добавление
     if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
         terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
         if (temp.type() == to_add.type()) {
+            // Если это нужный, то к его детям добавляем переданный токен
             pos->_children.push_back(std::make_shared<tree_node>(v));
             return true;
         }
     }
+    // Если к текущему поддереву добавить невозможно, то пытаемся добавить к дочерним поддеревьям
     for (auto& item : pos->_children) {
         if (add_token(to_add, v, item)) {
             return true;
@@ -95,16 +116,22 @@ bool parse_tree::add_token(const terminal& to_add, const token& v, ptree_node& p
 }
 
 bool parse_tree::add_product(const terminal& to_add, type_product product, ptree_node& pos) {
+    // Если мы пришли в пустое поддерево, то просто выходим из него
+    // (по идее такая ситуация невозможно, но проверка была вставлена для безопасности)
     if (! pos) {
         return false;
     }
+    // Если это корень содержит терминал и у него нет детей, то к нему возможно добавление
     if (pos->_value->class_name() == "terminal" && pos->_children.empty()) {
         terminal temp = *std::dynamic_pointer_cast<terminal>(pos->_value);
         if (temp.type() == to_add.type()) {
+            // Если это нужный, то к его детям добавляем терминалы и токены, соответсвующее
+            // переданной продукции
             push_product_item(pos->_children, product);
             return true;
         }
     }
+    // Если к текущему поддереву добавить невозможно, то пытаемся добавить к дочерним поддеревьям
     for (auto& item : pos->_children) {
         if (add_product(to_add, product, item)) {
             return true;
@@ -114,6 +141,8 @@ bool parse_tree::add_product(const terminal& to_add, type_product product, ptree
 }
 
 void parse_tree::push_product_item(std::vector<std::shared_ptr<tree_node>>& children, type_product product) {
+    // В этой функции просто для каждой продукции необходимо прописать, какие токены и терминалы она
+    // добавляет
     if (product == FUNCTION) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::BEGIN}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::DESCRIPTION}));
