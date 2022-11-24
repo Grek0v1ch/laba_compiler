@@ -5,8 +5,13 @@
 #include <string>
 #include "lexical_item.h"
 
+/**
+ * Класс терминала. Наследуется от интерфейса lexical_item
+ * \param _type - тип терминала
+ * */
 class terminal : public lexical_item {
 public:
+    // Типы терминалов
     enum type_terminal {
         FUNCTION, BEGIN, END, FUNCTION_NAME,
         DESCRIPTION, DESCR,
@@ -16,12 +21,29 @@ public:
         STRING_EXPR, SIMPLE_STRING_EXPR,
         ID, CONST
     };
+    /**
+     * Конструктор по умолчанию. Терминал инициализируется типом FUNCTION
+     * */
     terminal() : _type(FUNCTION) {}
-    terminal(const terminal& v) : _type(v._type) {}
+    /**
+     * Конструктор по типу терминала
+     * */
     terminal(type_terminal type) : _type(type) {}
-
-    std::string class_name() const override { return {"terminal"}; }
+    /**
+     * Конструктор копирования
+     * */
+    terminal(const terminal& v) : _type(v._type) {}
+    /**
+     * Метод возвращает тип терминала
+     * */
     type_terminal type() const { return _type; }
+
+    /**
+     * Реализация метода из интерфейса lexical_item
+     * Метод возвращает имя класса
+     * \return "terminal"
+     * */
+    std::string class_name() const override { return {"terminal"}; }
 
     friend std::ostream& operator<<(std::ostream& out, const terminal& v);
 

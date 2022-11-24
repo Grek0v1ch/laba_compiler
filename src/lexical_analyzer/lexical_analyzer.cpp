@@ -3,75 +3,73 @@
 #include <algorithm>
 
 void lexical_analyzer::update_position(const char s) {
+    // Если это символ перехода строки, то создаем новую строку и переходим на нее
     if (s == '\n') {
         _pos._data.push_back(0);
+    // Иначе увеличиваем число символов в текущей строке
     } else {
         (*_pos._data.rbegin())++;
     }
+    // Накапливаем последнее прочитанное слово
     _pos._last_word += s;
 }
 
-// Метод проверяет, что символ является символом разделителем (односимвольной лексемой)
 bool lexical_analyzer::is_separators(char s) {
     std::vector<char> spr_sym = { '+', '-', '(', ')', '{', '}', ',', ';', '=' };
     return std::find(spr_sym.begin(), spr_sym.end(), s) != spr_sym.end();
 }
 
-// Перегрузка метода для типа std::string
 bool lexical_analyzer::is_separators(std::string& s) {
     std::vector<std::string> spr_sym = { "+", "-", "(", ")", "{", "}", ",", ";", "=" };
     return std::find(spr_sym.begin(), spr_sym.end(), s) != spr_sym.end();
 }
 
-// Метод проверяет, является ли слово ключевым (это слова int, char, return)
 bool lexical_analyzer::is_keyword(std::string& s) {
     return s == "int" || s == "return" || s == "char";
 }
 
-// Метод возвращает тип лексемы разделителя (типы лексем объявлены в файле lexical_item.h)
-type_lexeme lexical_analyzer::get_separator_type(std::string& s) {
+token::type_lexeme lexical_analyzer::get_separator_type(std::string& s) {
     if (s == "+") {
-        return SUM;
+        return token::SUM;
     } else if (s == "-") {
-        return MINUS;
+        return token::MINUS;
     } else if (s == "(") {
-        return LBRACKET;
+        return token::LBRACKET;
     } else if (s == ")") {
-        return RBRACKET;
+        return token::RBRACKET;
     } else if (s == "{") {
-        return LBRACKET_FIGURE;
+        return token::LBRACKET_FIGURE;
     } else if (s == "}") {
-        return RBRACKET_FIGURE;
+        return token::RBRACKET_FIGURE;
     } else if (s == ",") {
-        return COMMA;
+        return token::COMMA;
     } else if (s == ";") {
-        return SEMICOLON;
+        return token::SEMICOLON;
     } else if (s == "=") {
-        return EQUALS;
+        return token::EQUALS;
     }
-    return UNKNOWN;
+    return token::UNKNOWN;
 }
 
-// Метод возвращает тип ключевого слова (типы лексем объявлены в файле lexical_item.h)
-type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
+token::type_lexeme lexical_analyzer::get_keyword_type(std::string& s) {
     if (s == "return") {
-        return RETURN;
+        return token::RETURN;
     } else if (s == "int") {
-        return INT;
+        return token::INT;
     } else if (s == "char") {
-        return CHAR;
+        return token::CHAR;
     }
-    return UNKNOWN;
+    return token::UNKNOWN;
 }
 
-// Метод получает следующее по тексту слово
 std::string lexical_analyzer::get_next_word() {
     std::string word;
+    // Очищаем последнее считанное слово, так как сейчас будет прочитано новое
     _pos._last_word.clear();
     while (true) {
         char s;
         _input.get(s);
-        // Если это конец файла то останавливаем цикл
+        // Если это конец файла, то останавливаем цикл
         if (_input.eof()) {
             break;
         }
@@ -115,9 +113,10 @@ lexical_analyzer::lexical_analyzer(const char* file_name) {
     _pos._data = std::vector<int>(1);
 }
 
-// Метод возвращает следующий по тексту токен
 token lexical_analyzer::get_next_token() {
+    // Получаем следующее по тексту слово
     std::string curr_word = get_next_word();
+    // Далее определяем тип токена
     if (curr_word.empty()) {
         return {};
     }
@@ -135,23 +134,29 @@ token lexical_analyzer::get_next_token() {
 }
 
 void lexical_analyzer::return_last_word() {
+    // Слово необходимо вернуть в обратном порядке, чтобы потом его считать как надо
     std::reverse(_pos._last_word.begin(), _pos._last_word.end());
     for (const char& s : _pos._last_word) {
+        // Если возвращаем символ перехода строки, то удаляем из вектора последнюю строку
+        // Также удаляем последнюю строку, если в ней не осталось символов
         if (s == '\n' || (*_pos._data.rbegin()) == 0) {
             _pos._data.pop_back();
+        // Иначе просто уменьшаем число символов в строке
         } else {
             (*_pos._data.rbegin())--;
         }
         _input.putback(s);
     }
+    // Нужно в конце отдельно проверить, нужно ли удалить последнюю строку
     if ((*_pos._data.rbegin()) == 0) {
         _pos._data.pop_back();
     }
 }
 
-// Метод возвращает хеш таблицу со всеми лексемами прочитанными из файла
+
 hash_table lexical_analyzer::get_all_tokens() {
     DFSM automat = DFSM();
+    // Пока читаются токены, добавляем их в таблицу
     while (true) {
         token curr = get_next_token();
         if (_input.eof()) {

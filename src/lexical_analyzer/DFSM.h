@@ -5,7 +5,9 @@
 #include <string>
 #include "token.h"
 
-// Класс детерминированного конечного автомата для распознавания лексем языка.
+/**
+ * Класс детерминированного конечного автомата для распознавания токенов языка.
+ */
 class DFSM {
 private:
 	// Состояния автомата.
@@ -28,20 +30,34 @@ private:
 
 	using table = std::vector<std::vector<state>>;
 
+    // Размеры таблицы состояний автомата
 	#define COUNT_STATE 6
 	#define COUNT_EVENT 3
 
 	table _table;
 
-	// Метод совершает "шаг" автомата - из состояния по символу переходит в новое состояние.
-	state function_step(state, event) const;
-	// Метод определяет тип символа.
-	event get_event(char) const;
+	/**
+	 * Метод совершает "шаг" автомата - из состояния по символу переходит в новое состояние.
+	 * \param from - состояние из которого делаем шаг
+	 * \param curr_event - по какому событию делаем переход
+	 * */
+	state function_step(state from, event curr_event) const;
+	/**
+	 * Метод по символу определяет событие в автомате
+	 * \param s - символ для определения состояния
+	 * */
+	event get_event(char s) const;
 
 public:
+    /**
+     * Конструктор по умолчанию
+     * */
 	DFSM();
-	// Метод непосредственно моделирует работу автомата.
-	type_lexeme process(std::string) const;
+	/**
+	 * Метод определяет тип токена по его текстовому представлению
+	 * \param lex - текстовое представление токена
+	 * */
+	token::type_lexeme process(const std::string& lex) const;
 };
 
 #endif // DFSM_H

@@ -22,52 +22,52 @@ token& token::operator=(const token& v) {
 std::ostream& operator<<(std::ostream& out, const token& v) {
     std::string output;
     switch (v._type) {
-        case RETURN:
+        case token::RETURN:
             output = "Keyword Return";
             break;
-        case INT:
+        case token::INT:
             output = "Keyword Int";
             break;
-        case CHAR:
+        case token::CHAR:
             output = "Keyword Char";
             break;
-        case ID:
+        case token::ID:
             output = "Id";
             break;
-        case NUMBER:
+        case token::NUMBER:
             output = "Number";
             break;
-        case SIMPLE_STRING:
+        case token::SIMPLE_STRING:
             output = "Simple String";
             break;
-        case SUM:
+        case token::SUM:
             output = "Sum";
             break;
-        case MINUS:
+        case token::MINUS:
             output = "Minus";
             break;
-        case LBRACKET:
+        case token::LBRACKET:
             output = "Left Bracket";
             break;
-        case RBRACKET:
+        case token::RBRACKET:
             output = "Right Bracket";
             break;
-        case EQUALS:
+        case token::EQUALS:
             output = "Equals";
             break;
-        case SEMICOLON:
+        case token::SEMICOLON:
             output = "Semicolon";
             break;
-        case LBRACKET_FIGURE:
+        case token::LBRACKET_FIGURE:
             output = "Left Bracket Figure";
             break;
-        case RBRACKET_FIGURE:
+        case token::RBRACKET_FIGURE:
             output = "Right Bracket Figure";
             break;
-        case COMMA:
+        case token::COMMA:
             output = "Comma";
             break;
-        case UNKNOWN:
+        case token::UNKNOWN:
             output = "Unknown";
             break;
         default:

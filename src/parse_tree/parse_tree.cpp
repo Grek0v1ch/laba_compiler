@@ -151,14 +151,14 @@ void parse_tree::push_product_item(std::vector<std::shared_ptr<tree_node>>& chil
     } else if (product == BEGIN) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::TYPE}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::FUNCTION_NAME}));
-        children.push_back(std::make_shared<tree_node>(token{LBRACKET, "("}));
-        children.push_back(std::make_shared<tree_node>(token{RBRACKET, ")"}));
-        children.push_back(std::make_shared<tree_node>(token{LBRACKET_FIGURE, "{"}));
+        children.push_back(std::make_shared<tree_node>(token{token::LBRACKET, "("}));
+        children.push_back(std::make_shared<tree_node>(token{token::RBRACKET, ")"}));
+        children.push_back(std::make_shared<tree_node>(token{token::LBRACKET_FIGURE, "{"}));
     } else if (product == END) {
-        children.push_back(std::make_shared<tree_node>(token{RETURN, "return"}));
+        children.push_back(std::make_shared<tree_node>(token{token::RETURN, "return"}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
-        children.push_back(std::make_shared<tree_node>(token{SEMICOLON, ";"}));
-        children.push_back(std::make_shared<tree_node>(token{RBRACKET_FIGURE, "}"}));
+        children.push_back(std::make_shared<tree_node>(token{token::SEMICOLON, ";"}));
+        children.push_back(std::make_shared<tree_node>(token{token::RBRACKET_FIGURE, "}"}));
     } else if (product == FUNCTION_NAME) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
     } else if (product == DESCRIPTION_1) {
@@ -169,16 +169,16 @@ void parse_tree::push_product_item(std::vector<std::shared_ptr<tree_node>>& chil
     } else if (product == DESCR) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::TYPE}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::VAR_LIST}));
-        children.push_back(std::make_shared<tree_node>(token{SEMICOLON, ";"}));
+        children.push_back(std::make_shared<tree_node>(token{token::SEMICOLON, ";"}));
     } else if (product == TYPE_1) {
-        children.push_back(std::make_shared<tree_node>(token{INT, "int"}));
+        children.push_back(std::make_shared<tree_node>(token{token::INT, "int"}));
     } else if (product == TYPE_2) {
-        children.push_back(std::make_shared<tree_node>(token{CHAR, "char"}));
+        children.push_back(std::make_shared<tree_node>(token{token::CHAR, "char"}));
     } else if (product == VAR_LIST_1) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
     } else if (product == VAR_LIST_2) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
-        children.push_back(std::make_shared<tree_node>(token{COMMA, ","}));
+        children.push_back(std::make_shared<tree_node>(token{token::COMMA, ","}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::VAR_LIST}));
     } else if (product == OPERATORS_1) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::OP}));
@@ -187,37 +187,37 @@ void parse_tree::push_product_item(std::vector<std::shared_ptr<tree_node>>& chil
         children.push_back(std::make_shared<tree_node>(terminal{terminal::OPERATORS}));
     } else if (product == OP_1) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
-        children.push_back(std::make_shared<tree_node>(token{EQUALS, "="}));
+        children.push_back(std::make_shared<tree_node>(token{token::EQUALS, "="}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::NUM_EXPR}));
-        children.push_back(std::make_shared<tree_node>(token{SEMICOLON, ";"}));
+        children.push_back(std::make_shared<tree_node>(token{token::SEMICOLON, ";"}));
     } else if (product == OP_2) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
-        children.push_back(std::make_shared<tree_node>(token{EQUALS, "="}));
+        children.push_back(std::make_shared<tree_node>(token{token::EQUALS, "="}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::STRING_EXPR}));
-        children.push_back(std::make_shared<tree_node>(token{SEMICOLON, ";"}));
+        children.push_back(std::make_shared<tree_node>(token{token::SEMICOLON, ";"}));
     } else if (product == NUM_EXPR_1) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::SIMPLE_NUM_EXPR}));
     } else if (product == NUM_EXPR_2) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::SIMPLE_NUM_EXPR}));
-        children.push_back(std::make_shared<tree_node>(token{SUM, "+"}));
+        children.push_back(std::make_shared<tree_node>(token{token::SUM, "+"}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::NUM_EXPR}));
     } else if (product == NUM_EXPR_3) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::SIMPLE_NUM_EXPR}));
-        children.push_back(std::make_shared<tree_node>(token{MINUS, "-"}));
+        children.push_back(std::make_shared<tree_node>(token{token::MINUS, "-"}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::NUM_EXPR}));
     } else if (product == SIMPLE_NUM_EXPR_1) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::ID}));
     } else if (product == SIMPLE_NUM_EXPR_2) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::CONST}));
     } else if (product == SIMPLE_NUM_EXPR_3) {
-        children.push_back(std::make_shared<tree_node>(token{LBRACKET, "("}));
+        children.push_back(std::make_shared<tree_node>(token{token::LBRACKET, "("}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::NUM_EXPR}));
-        children.push_back(std::make_shared<tree_node>(token{RBRACKET, ")"}));
+        children.push_back(std::make_shared<tree_node>(token{token::RBRACKET, ")"}));
     } else if (product == STRING_EXPR_1) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::SIMPLE_STRING_EXPR}));
     } else if (product == STRING_EXPR_2) {
         children.push_back(std::make_shared<tree_node>(terminal{terminal::SIMPLE_STRING_EXPR}));
-        children.push_back(std::make_shared<tree_node>(token{SUM, "+"}));
+        children.push_back(std::make_shared<tree_node>(token{token::SUM, "+"}));
         children.push_back(std::make_shared<tree_node>(terminal{terminal::STRING_EXPR}));
     }
 }
