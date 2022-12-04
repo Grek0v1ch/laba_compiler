@@ -2,6 +2,13 @@
 #include <cctype>
 #include <algorithm>
 
+lexical_analyzer::lexical_analyzer(const char* file_name) {
+    std::ifstream fin(file_name);
+    _input << fin.rdbuf();
+    fin.close();
+    _pos._data = std::vector<int>(1);
+}
+
 void lexical_analyzer::update_position(const char s) {
     // Если это символ перехода строки, то создаем новую строку и переходим на нее
     if (s == '\n') {
@@ -104,13 +111,6 @@ std::string lexical_analyzer::get_next_word() {
         word += s;
     }
     return word;
-}
-
-lexical_analyzer::lexical_analyzer(const char* file_name) {
-    std::ifstream fin(file_name);
-    _input << fin.rdbuf();
-    fin.close();
-    _pos._data = std::vector<int>(1);
 }
 
 token lexical_analyzer::get_next_token() {
