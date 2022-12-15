@@ -27,7 +27,7 @@ public:
      * Конструктор по умолчанию
      * Вектор с детьми будет создан пустым
      * */
-    tree_node() : _value(nullptr), _children(std::vector<std::shared_ptr<tree_node>>()) {}
+    tree_node() : _value{nullptr}, _children{std::vector<std::shared_ptr<tree_node>>()}, _rpn{} {}
 
     /**
      * Конструктор по терминалу
@@ -35,8 +35,9 @@ public:
      * Вектор с детьми будет создан пустым
      * */
     tree_node(const terminal& v) :
-        _value(std::static_pointer_cast<lexical_item>(std::make_shared<terminal>(v))),
-        _children(std::vector<std::shared_ptr<tree_node>>()) {}
+        _value{std::static_pointer_cast<lexical_item>(std::make_shared<terminal>(v))},
+        _children{std::vector<std::shared_ptr<tree_node>>()},
+        _rpn{} {}
 
     /**
      * Конструктор по токену
@@ -44,8 +45,9 @@ public:
      * Вектор с детьми будет создан пустым
      * */
     tree_node(const token& v) :
-        _value(std::static_pointer_cast<lexical_item>(std::make_shared<token>(v))),
-        _children(std::vector<std::shared_ptr<tree_node>>()) {}
+        _value{std::static_pointer_cast<lexical_item>(std::make_shared<token>(v))},
+        _children{std::vector<std::shared_ptr<tree_node>>()},
+        _rpn{} {}
 
     /**
      * Конструктор по ссылке на интерфейс lexical_item
@@ -53,8 +55,9 @@ public:
      * Вектор с детьми будет создан пустым
      * */
     tree_node(ptr_lexi v) :
-        _value(std::move(v)),
-        _children(std::vector<std::shared_ptr<tree_node>>()) {}
+        _value{std::move(v)},
+        _children{std::vector<std::shared_ptr<tree_node>>()},
+        _rpn{} {}
 
     /**
      * Конструктор копирования
@@ -74,6 +77,8 @@ public:
 private:
     ptr_lexi _value;
     std::vector<std::shared_ptr<tree_node>> _children;
+    // Атрибут для генерации обратной польской записи
+    std::string _rpn;
 };
 
 using ptree_node = std::shared_ptr<tree_node>;
@@ -164,6 +169,9 @@ public:
      * */
     void add_product(const terminal& to_add, const type_product& product) {
         add_product(to_add, product, _root); }
+
+    // Класс семантического анализа объявлен дружественным, чтобы легче реализовать обход дерева
+    friend class semantic;
 private:
     ptree_node _root;
 

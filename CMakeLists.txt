@@ -11,14 +11,16 @@ add_executable(laba_compiler
         src/lexical_analyzer/DFSM.cpp
         src/hash_table/hash_table.cpp
         src/parser/parser.cpp
-        src/parse_tree/parse_tree.cpp)
+        src/parse_tree/parse_tree.cpp
+        src/semantic/semantic.cpp)
 
 target_include_directories(laba_compiler PUBLIC
         src/hash_table
         src/lexical_item
         src/lexical_analyzer
         src/parser
-        src/parse_tree)
+        src/parse_tree
+        src/semantic)
 
 add_executable(tree_test
         src/lexical_item/token.cpp
