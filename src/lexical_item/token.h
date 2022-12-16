@@ -55,6 +55,11 @@ public:
      * \return тип токена
      * */
     type_lexeme type() const { return _type; }
+    /**
+     * Метод возвращает тип переменной
+     * \return тип переменной
+     * */
+    std::string var_type() const { return _var_type; }
 
     /**
      * Метод изменяет значение поля _var_type

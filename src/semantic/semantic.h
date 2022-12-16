@@ -1,26 +1,31 @@
 #pragma once
 
 #include "parse_tree.h"
+#include "hash_table.h"
 
 #include <string>
 
 class semantic {
 private:
     parse_tree _tree;
+    hash_table _table;
+    bool _is_not_error;
 
 private:
     void feel_begin();
     void feel_end();
     void feel_description(std::shared_ptr<tree_node>& curr_description);
     void feel_descr(std::shared_ptr<tree_node>& curr_descr);
-    int feel_var_list(std::shared_ptr<tree_node>& var_list);
+    int feel_var_list(std::shared_ptr<tree_node>& var_list, std::string& var_type);
     void feel_operators(std::shared_ptr<tree_node>& curr_operators);
     void feel_op(std::shared_ptr<tree_node>& curr_op);
-    void feel_expr(std::shared_ptr<tree_node>& curr_expr);
-    void feel_simple_expr(std::shared_ptr<tree_node>& curr_simple_expr);
+    void feel_expr(std::shared_ptr<tree_node>& curr_expr, std::string& checker);
+    void feel_simple_expr(std::shared_ptr<tree_node>& curr_simple_expr, std::string& checker);
 
 public:
-    semantic(const parse_tree& v) : _tree{v} {}
+    semantic(const parse_tree& v, const hash_table& h) : _tree{v}, _table{h}, _is_not_error{true} {}
     void run();
+    bool is_not_error() const { return _is_not_error; }
     std::string get_rpn() const { return _tree._root->_rpn; }
+    hash_table get_hash_table() const { return _table; }
 };

@@ -77,6 +77,7 @@ public:
     void remove(token value);
 
     void set_type(std::string& text, std::string& var_type);
+    token find_lexeme(std::string& text);
 
     // Метод печати хеш-таблицы в консоль
     void print();

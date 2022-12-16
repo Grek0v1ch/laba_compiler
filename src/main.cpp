@@ -14,7 +14,7 @@ bool open_file(int argc, char const *argv[]);
 // Функция сравнения для сортировки вектора с токенами
 bool cmp(const std::pair<size_t, token>& first, const std::pair<size_t, token>& second);
 // Функция выводит в файл список полученных токенов
-void output_result(std::vector<std::pair<size_t, token>>& res_to_arr, std::ofstream& fout);
+void output_result(std::vector<std::pair<size_t, token>>& res_to_arr, std::ostream& fout);
 
 int main(int argc, char const *argv[]) {
 	if (! open_file(argc, argv)) {
@@ -33,9 +33,13 @@ int main(int argc, char const *argv[]) {
     } else {
         std::cout << "Error\n";
     }
-    semantic sem(par.get_parse_tree());
+    semantic sem(par.get_parse_tree(), par.get_hash_table());
     sem.run();
     std::cout << sem.get_rpn() << '\n';
+
+    hash_table res = sem.get_hash_table();
+	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
+    output_result(res_to_arr, std::cout);
 
 	fout.close();
 	return 0;
@@ -72,7 +76,7 @@ bool cmp(const std::pair<size_t, token>& first, const std::pair<size_t, token>& 
 }
 
 // Функция выводит в файл список полученных токенов
-void output_result(std::vector<std::pair<size_t, token>>& res_to_arr, std::ofstream& fout) {
+void output_result(std::vector<std::pair<size_t, token>>& res_to_arr, std::ostream& fout) {
 	sort(res_to_arr.begin(), res_to_arr.end(), cmp);
 	for (const auto& item : res_to_arr) {
 		fout << "Key: " << item.first << ' ' << item.second << '\n';

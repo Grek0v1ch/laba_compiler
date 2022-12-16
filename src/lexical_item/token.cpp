@@ -77,7 +77,7 @@ std::ostream& operator<<(std::ostream& out, const token& v) {
     }
     out << output << ' ' << v._text;
     if (! v._var_type.empty()) {
-        out << "Var_type:" << v._var_type;
+        out << " Var_type:" << v._var_type;
     }
     return out;
 }
