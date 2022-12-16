@@ -4,10 +4,11 @@ token::token(const type_lexeme& type, const char text) {
     _type = type;
     _text = std::string();
     _text += text;
+    _var_type = std::string();
 }
 
 bool token::operator==(const token& v) const& {
-    return _type == v._type && _text == v._text;
+    return _type == v._type && _text == v._text && _var_type == v._var_type;
 }
 
 token& token::operator=(const token& v) {
@@ -16,6 +17,7 @@ token& token::operator=(const token& v) {
     }
     _type = v._type;
     _text = v._text;
+    _var_type = v._var_type;
     return *this;
 }
 
@@ -74,5 +76,8 @@ std::ostream& operator<<(std::ostream& out, const token& v) {
             break;
     }
     out << output << ' ' << v._text;
+    if (! v._var_type.empty()) {
+        out << "Var_type:" << v._var_type;
+    }
     return out;
 }
