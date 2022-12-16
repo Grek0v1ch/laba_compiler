@@ -90,20 +90,18 @@ void hash_table::remove(token value) {
     }
 }
 
-// Метод возвращает токен с данным текстовым представлением
- token hash_table::find_lexeme(std::string& text) {
+ void hash_table::set_type(std::string& text, std::string& var_type) {
     size_t idx = hash_function(text, _arr.size());
     // Идем по таблице пока не упремся либо в пустой узел, либо в узел текстовое представление
     // которого совпадает с искомым текстовым представлением
     while (_arr[idx] != nullptr && _arr[idx]->_key.text() != text) {
         idx = (idx + 1) % _arr.size();
     }
-    // Возвращаем токен только в том случае, если мы нашли не пустой и не удаленный узел,
+    // Меняем токен только в том случае, если мы нашли не пустой и не удаленный узел,
     // текстовое представление токена которого равно искомому текстовому представлению
     if (_arr[idx] != nullptr && _arr[idx]->_key.text() == text && ! _arr[idx]->_is_del) {
-        return _arr[idx]->_key;
+        _arr[idx]->_key.set_var_type(var_type);
     }
-    return {};
 }
 
 // Метод печати хеш-таблицы в консоль
