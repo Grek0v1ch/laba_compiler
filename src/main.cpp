@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "hash_table.h"
 #include "parser.h"
+#include "semantic.h"
 
 // Функция проверяет, можно ли открыть файл на запись
 bool is_open_output(const char* output);
@@ -32,6 +33,9 @@ int main(int argc, char const *argv[]) {
     } else {
         std::cout << "Error\n";
     }
+    semantic sem(par.get_parse_tree());
+    sem.run();
+    std::cout << sem.get_rpn() << '\n';
 
 	fout.close();
 	return 0;
