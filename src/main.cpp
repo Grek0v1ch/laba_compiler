@@ -27,19 +27,19 @@ int main(int argc, char const *argv[]) {
         hash_table res = par.get_hash_table();
 	    std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
 	    output_result(res_to_arr, fout);
+
         fout << "\n\n\n\n";
         par.print_parse_tree(fout);
-        std::cout << "No error\n";
+
+        semantic sem(par.get_parse_tree(), par.get_hash_table());
+        sem.run();
+        if (sem.is_not_error()) {
+            fout << "\n\n\n\n" << sem.get_rpn() << '\n';
+            std::cout << "No error\n";
+        }
     } else {
         std::cout << "Error\n";
     }
-    semantic sem(par.get_parse_tree(), par.get_hash_table());
-    sem.run();
-    std::cout << sem.get_rpn() << '\n';
-
-    hash_table res = sem.get_hash_table();
-	std::vector<std::pair<size_t, token>> res_to_arr = res.to_array();
-    output_result(res_to_arr, std::cout);
 
 	fout.close();
 	return 0;
