@@ -115,6 +115,11 @@ void semantic::feel_op(std::shared_ptr<tree_node>& curr_op) {
     curr_op->_rpn = var->text() + " " + curr_op->_rpn;
     std::string temp = var->text();
     std::string checker = _table.find_lexeme(temp).var_type();
+    if (checker.empty()) {
+        std::cout << "Identification " << var->text() << " is not declaration\n";
+        _is_not_error = false;
+        return;
+    }
     feel_expr(curr_op->_children[2], checker);
     curr_op->_rpn = curr_op->_children[2]->_rpn + " " + curr_op->_rpn;
 }
@@ -143,20 +148,22 @@ void semantic::feel_simple_expr(std::shared_ptr<tree_node>& curr_simple_expr, st
         if (checker == "int") {
             std::cout << "Different type: " << type->text() << " must be " << checker << '\n';
             _is_not_error = false;
+            return;
         }
     } else {
-        type = std::dynamic_pointer_cast<token>(
-                curr_simple_expr->_children[0]->_children[0]->_value);
+        type = std::dynamic_pointer_cast<token>(curr_simple_expr->_children[0]->_children[0]->_value);
         if (checker == "char") {
             std::cout << "Different type: " << type->text() << " must be " << checker << '\n';
             _is_not_error = false;
+            return;
         }
     }
-    if (! type->var_type().empty()) {
+    if (type->type() == token::ID) {
         std::string temp = type->text();
         if (_table.find_lexeme(temp).var_type() != checker) {
             std::cout << "Different type: " << temp << " must be " << checker << '\n';
             _is_not_error = false;
+            return;
         }
     }
     curr_simple_expr->_rpn = type->text();
